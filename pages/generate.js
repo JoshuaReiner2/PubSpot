@@ -200,10 +200,9 @@ export default function Generate() {
                 <div className={styles.sidebarSub}>Click any section to edit</div>
               </div>
               <nav className={styles.sectionNav}>
-                {PROPOSAL_SECTIONS.map(s => (
-                  <button key={s.key}
-                    className={`${styles.sectionBtn} ${activeSection === s.key ? styles.active : ''}`}
-                    onClick={() => setActiveSection(s.key)}>
+               {PROPOSAL_SECTIONS.map(s => (
+  <div key={s.key} id={s.key} className={`${styles.section} ${activeSection === s.key ? styles.sectionActive : ''}`}
+    onClick={() => setActiveSection(s.key)}>
                     {s.label}
                   </button>
                 ))}
