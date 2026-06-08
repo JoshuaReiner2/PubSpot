@@ -1,0 +1,24 @@
+{
+  "name": "pubspot",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "next": "14.2.3",
+    "react": "^18",
+    "react-dom": "^18",
+    "@anthropic-ai/sdk": "^0.20.0",
+    "mammoth": "^1.7.2",
+    "pdf-parse": "^1.1.1",
+    "formidable": "^3.5.1",
+    "react-dropzone": "^14.2.3"
+  },
+  "devDependencies": {
+    "eslint": "^8",
+    "eslint-config-next": "14.2.3"
+  }
+}
