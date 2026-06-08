@@ -51,7 +51,7 @@ const raw = message.content[0].text.trim()
 // Extract JSON from anywhere in the response
 const jsonMatch = raw.match(/\{[\s\S]*\}/)
 if (!jsonMatch) {
-  console.error('No JSON found in response:', raw.slice(0, 500))
+  console.error('Full raw response:', raw)
   return res.status(500).json({ error: 'The AI returned an unexpected format. Please try again.' })
 }
 const cleaned = jsonMatch[0]
