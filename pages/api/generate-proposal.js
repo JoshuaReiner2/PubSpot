@@ -47,10 +47,14 @@ Return ONLY a valid JSON object with exactly these keys (no markdown, no backtic
       messages: [{ role: 'user', content: prompt }],
     })
 
-    const raw = message.content[0].text.trim()
-
-    // Strip any accidental markdown fences
-    const cleaned = raw.replace(/^```json\s*/i, '').replace(/^```\s*/i, '').replace(/```\s*$/i, '').trim()
+const raw = message.content[0].text.trim()
+// Extract JSON from anywhere in the response
+const jsonMatch = raw.match(/\{[\s\S]*\}/)
+if (!jsonMatch) {
+  console.error('No JSON found in response:', raw.slice(0, 500))
+  return res.status(500).json({ error: 'The AI returned an unexpected format. Please try again.' })
+}
+const cleaned = jsonMatch[0]
 
     let proposal
     try {
