@@ -311,3 +311,118 @@
   .ctaSection { padding: 72px 24px; }
   .footer { flex-direction: column; gap: 12px; text-align: center; padding: 24px; }
 }
+
+.pricing {
+  padding: 100px 48px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.pricingGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.plan {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 36px 32px;
+  background: white;
+  position: relative;
+}
+
+.planFeatured {
+  border-color: var(--accent);
+  border-width: 2px;
+}
+
+.planBadge {
+  position: absolute;
+  top: -13px; left: 50%;
+  transform: translateX(-50%);
+  background: var(--accent);
+  color: white;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 4px 14px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+.planName {
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.planPrice {
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 1;
+  margin: 16px 0 4px;
+}
+
+.planPrice span {
+  font-size: 16px;
+  font-weight: 300;
+  color: var(--muted);
+}
+
+.planDesc {
+  font-size: 14px;
+  color: var(--muted);
+  font-weight: 300;
+  margin-bottom: 24px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--border);
+  line-height: 1.6;
+}
+
+.planFeatures {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 28px;
+}
+
+.planFeatures li {
+  font-size: 14px;
+  font-weight: 300;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.planFeatures li::before {
+  content: '→';
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
+.planBtn {
+  display: block;
+  width: 100%;
+  padding: 14px;
+  text-align: center;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  border: 1.5px solid var(--ink);
+  color: var(--ink);
+  transition: all 0.2s;
+}
+
+.planBtn:hover { background: var(--ink); color: var(--cream); text-decoration: none; }
+.planFeatured .planBtn { background: var(--accent); color: white; border-color: var(--accent); }
+.planFeatured .planBtn:hover { background: #a83d1e; }
+
+@media (max-width: 900px) {
+  .pricing { padding: 72px 24px; }
+  .pricingGrid { grid-template-columns: 1fr; }
+}
