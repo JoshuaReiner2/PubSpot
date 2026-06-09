@@ -9,7 +9,7 @@ export default function SignUpPage() {
       justifyContent: 'center',
       background: '#f7f3ee'
     }}>
-      <SignUp afterSignUpUrl="/generate" redirectUrl="/generate" />
+      <SignUp />
     </div>
   )
 }
