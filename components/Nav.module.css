@@ -52,3 +52,17 @@
   .nav { padding: 16px 20px; }
   .links a:not(:last-child) { display: none; }
 }
+
+.signInBtn {
+  background: transparent;
+  border: none;
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--muted);
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.2s;
+}
+
+.signInBtn:hover { color: var(--ink); }
