@@ -66,6 +66,13 @@ export default function Generate() {
       if (data.error) { setError(data.error); setStep('details'); return }
       setProposal(data.proposal)
       setEditedProposal(data.proposal)
+      // Save proposal + details to localStorage for query page
+      localStorage.setItem('pubspot_proposal', JSON.stringify({
+        ...data.proposal,
+        genre: details.genre,
+        audience: details.audience,
+        authorName: details.authorName,
+      }))
       setStep('proposal')
     } catch (e) {
       setError('Something went wrong generating your proposal. Please try again.')
@@ -78,16 +85,18 @@ export default function Generate() {
   }
 
   const handleDownload = () => {
+    const title = editedProposal.hook?.split('\n')[0]?.slice(0, 60) || 'Book Proposal'
     const sections = PROPOSAL_SECTIONS.map(s =>
-      `## ${s.label}\n\n${editedProposal[s.key] || ''}`
-    ).join('\n\n---\n\n')
-    const content = `# Book Proposal\n\n${sections}`
-    const blob = new Blob([content], { type: 'text/plain' })
+      `${s.label.toUpperCase()}\n${'='.repeat(s.label.length)}\n\n${editedProposal[s.key] || ''}`
+    ).join('\n\n' + '-'.repeat(60) + '\n\n')
+    const content = `BOOK PROPOSAL\n${'='.repeat(60)}\n\nPrepared by PubSpot\n\n${'='.repeat(60)}\n\n${sections}`
+    const blob = new Blob([content], { type: 'text/plain;charset=utf-8' })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
     a.download = 'book-proposal.txt'
     a.click()
+    URL.revokeObjectURL(url)
   }
 
   const scrollToSection = (key) => {
@@ -196,12 +205,13 @@ export default function Generate() {
                   </button>
                 ))}
               </nav>
-              <div className={styles.sidebarActions}>
-                <button className={styles.downloadBtn} onClick={handleDownload}>Download proposal</button>
-                <button className={styles.restartBtn} onClick={() => { setStep('upload'); setProposal(null); setFile(null); }}>
-                  Start new proposal
-                </button>
-              </div>
+<div className={styles.sidebarActions}>
+  <button className={styles.downloadBtn} onClick={handleDownload}>Download proposal</button>
+  <a href="/query" className={styles.queryBtn}>Query agents →</a>
+  <button className={styles.restartBtn} onClick={() => { setStep('upload'); setProposal(null); setFile(null); }}>
+    Start new proposal
+  </button>
+</div>
             </div>
             <div className={styles.proposalMain}>
               <div className={styles.proposalBanner}>

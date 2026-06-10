@@ -335,3 +335,20 @@
   .proposalSidebar { position: static; height: auto; }
   .proposalMain { padding: 24px; }
 }
+
+.queryBtn {
+  display: block;
+  background: #2a7a4f;
+  color: white;
+  border: none;
+  padding: 13px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+  text-decoration: none;
+  transition: background 0.2s;
+  margin-bottom: 8px;
+}
+
+.queryBtn:hover { background: #1e5c3a; text-decoration: none; }
