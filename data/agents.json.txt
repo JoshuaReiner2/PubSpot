@@ -1,0 +1,122 @@
+[
+  {
+    "id": "1",
+    "name": "Jennifer Weltz",
+    "agency": "Jean V. Naggar Literary Agency",
+    "email": "jweltz@jvnla.com",
+    "genres": ["narrative nonfiction", "memoir", "history", "science", "culture"],
+    "wishlist": "Looking for deeply reported narrative nonfiction, especially stories at the intersection of science, history, and culture. Strong voice is essential.",
+    "submissionMethod": "email",
+    "submissionUrl": "",
+    "queryGuidelines": "Email query letter, synopsis, and first 50 pages.",
+    "open": true
+  },
+  {
+    "id": "2",
+    "name": "Lisa Grubka",
+    "agency": "Fletcher & Company",
+    "email": "lisa@fletcherandco.com",
+    "genres": ["business", "science", "narrative nonfiction", "self-help", "health"],
+    "wishlist": "Interested in big idea nonfiction, business books, and narrative science. Looking for authors with strong platforms and original perspectives.",
+    "submissionMethod": "email",
+    "submissionUrl": "",
+    "queryGuidelines": "Email query letter and overview.",
+    "open": true
+  },
+  {
+    "id": "3",
+    "name": "Kate Johnson",
+    "agency": "Lippincott Massie McQuilkin",
+    "email": "kjohnson@lmqlit.com",
+    "genres": ["memoir", "narrative nonfiction", "cultural criticism", "essays", "history"],
+    "wishlist": "Drawn to books that challenge assumptions, memoir with universal themes, and cultural criticism with a fresh perspective.",
+    "submissionMethod": "form",
+    "submissionUrl": "https://lmqlit.com/submissions",
+    "queryGuidelines": "Submit via online form. Include query letter and first 10 pages.",
+    "open": true
+  },
+  {
+    "id": "4",
+    "name": "Mackenzie Brady Watson",
+    "agency": "Stuart Krichevsky Literary Agency",
+    "email": "mbw@skagency.com",
+    "genres": ["science", "history", "narrative nonfiction", "environment", "technology"],
+    "wishlist": "Passionate about science and nature writing, environmental narratives, and history of ideas. Looking for writers who can make complex topics accessible.",
+    "submissionMethod": "email",
+    "submissionUrl": "",
+    "queryGuidelines": "Email query letter, bio, and first 50 pages.",
+    "open": true
+  },
+  {
+    "id": "5",
+    "name": "Bridget Wagner Matzie",
+    "agency": "Aevitas Creative Management",
+    "email": "bwm@aevitascreative.com",
+    "genres": ["memoir", "self-help", "health", "wellness", "business", "narrative nonfiction"],
+    "wishlist": "Looking for memoir with a strong hook, practical nonfiction with fresh angles, and health or wellness books backed by expertise.",
+    "submissionMethod": "form",
+    "submissionUrl": "https://aevitascreative.com/submissions",
+    "queryGuidelines": "Submit via online form with query and sample pages.",
+    "open": true
+  },
+  {
+    "id": "6",
+    "name": "Anthony Mattero",
+    "agency": "CAA",
+    "email": "amattero@caa.com",
+    "genres": ["sports", "business", "narrative nonfiction", "pop culture", "music"],
+    "wishlist": "Loves sports narratives, music stories, and business books with strong personalities at the center. Big platform a plus.",
+    "submissionMethod": "email",
+    "submissionUrl": "",
+    "queryGuidelines": "Email query letter and brief overview.",
+    "open": true
+  },
+  {
+    "id": "7",
+    "name": "Stephanie Delman",
+    "agency": "Sanford J. Greenburger Associates",
+    "email": "sdelman@sjga.com",
+    "genres": ["memoir", "narrative nonfiction", "culture", "food", "travel", "essays"],
+    "wishlist": "Drawn to immersive narrative nonfiction, travel and food writing with cultural depth, and essay collections with a strong unifying voice.",
+    "submissionMethod": "email",
+    "submissionUrl": "",
+    "queryGuidelines": "Email query letter, bio, and first 3 chapters.",
+    "open": true
+  },
+  {
+    "id": "8",
+    "name": "Wendy Sherman",
+    "agency": "Wendy Sherman Associates",
+    "email": "wendy@wsherman.com",
+    "genres": ["memoir", "self-help", "narrative nonfiction", "psychology", "relationships"],
+    "wishlist": "Looking for memoir that illuminates universal human experience, psychology and relationships, and narrative nonfiction with emotional resonance.",
+    "submissionMethod": "form",
+    "submissionUrl": "https://wsherman.com/submissions",
+    "queryGuidelines": "Submit via online form. Query, synopsis, and first 50 pages.",
+    "open": true
+  },
+  {
+    "id": "9",
+    "name": "Jim Levine",
+    "agency": "Levine Greenberg Rostan Literary Agency",
+    "email": "jlevine@lgrliterary.com",
+    "genres": ["business", "science", "technology", "self-help", "health", "narrative nonfiction"],
+    "wishlist": "Seeking big idea books, business and leadership, science and technology for general audiences, and health and wellness with credentialed authors.",
+    "submissionMethod": "form",
+    "submissionUrl": "https://lgrliterary.com/submissions",
+    "queryGuidelines": "Submit via online form with query and overview.",
+    "open": true
+  },
+  {
+    "id": "10",
+    "name": "Laurie Abkemeier",
+    "agency": "DeFiore and Company",
+    "email": "laurie@defliterary.com",
+    "genres": ["self-help", "health", "memoir", "psychology", "science", "narrative nonfiction"],
+    "wishlist": "Particularly interested in health and medicine, psychology, self-improvement, and memoir by authors with compelling stories and platforms.",
+    "submissionMethod": "email",
+    "submissionUrl": "",
+    "queryGuidelines": "Email query letter, bio, and first 50 pages.",
+    "open": true
+  }
+]

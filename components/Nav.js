@@ -15,6 +15,7 @@ export default function Nav() {
         {isSignedIn ? (
           <>
             <Link href="/generate">Generate proposal</Link>
+            <Link href="/query">Query agents</Link>
             <UserButton afterSignOutUrl="/" />
           </>
         ) : (
