@@ -47,20 +47,37 @@ Return ONLY a raw JSON object (no markdown, no backticks, just the JSON). Each v
       messages: [{ role: 'user', content: prompt }],
     })
 
-    const raw = message.content[0].text.trim()
+ const raw = message.content[0].text.trim()
+    
+    // Try multiple JSON extraction strategies
+    let proposal
+    
+    // Strategy 1: find outermost { }
     const start = raw.indexOf('{')
     const end = raw.lastIndexOf('}')
-
+    
     if (start === -1 || end === -1) {
+      console.error('No JSON braces found:', raw.slice(0, 200))
       return res.status(500).json({ error: 'The AI returned an unexpected format. Please try again.' })
     }
-
+    
     const jsonStr = raw.slice(start, end + 1)
-    let proposal
+    
     try {
       proposal = JSON.parse(jsonStr)
     } catch (parseErr) {
-      return res.status(500).json({ error: 'The AI returned an unexpected format. Please try again.' })
+      // Strategy 2: try to fix common JSON issues
+      try {
+        const fixed = jsonStr
+          .replace(/[\u0000-\u001F\u007F-\u009F]/g, ' ')
+          .replace(/\n/g, '\\n')
+          .replace(/\r/g, '\\r')
+          .replace(/\t/g, '\\t')
+        proposal = JSON.parse(fixed)
+      } catch (e2) {
+        console.error('Both parse strategies failed:', parseErr.message)
+        return res.status(500).json({ error: 'The AI returned an unexpected format. Please try again.' })
+      }
     }
 
     res.status(200).json({ proposal })
