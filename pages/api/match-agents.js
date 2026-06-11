@@ -25,7 +25,7 @@ ${JSON.stringify(openAgents.map(a => ({ id: a.id, name: a.name, agency: a.agency
 
 Return ONLY a raw JSON array (no markdown, no backticks) of the top agents ranked by fit, best match first.
 Each item must have: id, score (1-10), reason (one sentence why they are a good match).
-Include all agents with a score of 5 or above.`
+Include ALL agents ranked by fit score. Always return all agents.`
 
   try {
     const message = await client.messages.create({

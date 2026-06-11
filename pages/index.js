@@ -3,6 +3,16 @@ import Link from 'next/link'
 import Nav from '../components/Nav'
 import styles from '../styles/Home.module.css'
 
+import { useUser } from '@clerk/nextjs'
+
+function GetStartedBtn() {
+  const { isSignedIn } = useUser()
+  return (
+    <a href={isSignedIn ? '/generate' : '/sign-up'} className={styles.cta}>
+      {isSignedIn ? 'Generate a proposal →' : 'Get started free →'}
+    </a>
+  )
+}
 export default function Home() {
   return (
     <>
@@ -20,7 +30,7 @@ export default function Home() {
             <div className={styles.eyebrow}>For nonfiction authors</div>
             <h1>Your manuscript deserves<br/>to be <em>published.</em></h1>
             <p className={styles.sub}>PubSpot turns your manuscript into a professional book proposal and automatically queries the right agents — so you can spend less time on paperwork and more time writing.</p>
-            <Link href="/sign-up" className={styles.cta}>Get started free →</Link>
+            <GetStartedBtn />
             <p className={styles.note}>Free to start. No credit card required.</p>
           </div>
         </section>
@@ -103,7 +113,7 @@ export default function Home() {
         <section className={styles.ctaSection}>
           <h2>Your book is <em>ready.</em><br/>Now let's find it a home.</h2>
           <p>Generate a full professional proposal from your manuscript in minutes.</p>
-          <Link href="/sign-up" className={styles.ctaBtn}>Get started free →</Link>
+          <GetStartedBtn />
         </section>
       </main>
 
