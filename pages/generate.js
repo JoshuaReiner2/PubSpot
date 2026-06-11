@@ -72,8 +72,7 @@ export default function Generate() {
       })
       setProgress('Drafting your proposal sections...')
 const data = await res.json()
-      console.log('API response keys:', Object.keys(data))
-console.log('Proposal keys:', data.proposal ? Object.keys(data.proposal) : 'no proposal')
+      console.log('API response:', JSON.stringify(data).slice(0, 500))
       if (data.error) { setError(data.error); setStep('details'); return }
       if (!data.proposal) { setError('No proposal returned. Please try again.'); setStep('details'); return }
       setProposal(data.proposal)
