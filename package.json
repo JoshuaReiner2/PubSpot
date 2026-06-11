@@ -18,7 +18,7 @@
     "mammoth": "^1.7.2",
     "pdf-parse": "^1.1.1",
     "formidable": "^3.5.1",
-    "react-dropzone": "^14.2.3"
+    "react-dropzone": "^14.2.3",
     "docx": "^8.5.0",
   },
   "devDependencies": {
