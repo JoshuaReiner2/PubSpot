@@ -71,8 +71,10 @@ export default function Generate() {
         body: JSON.stringify({ manuscriptText: manuscriptText.slice(0, 80000), details }),
       })
       setProgress('Drafting your proposal sections...')
-      const data = await res.json()
+const data = await res.json()
+      console.log('API response:', JSON.stringify(data).slice(0, 500))
       if (data.error) { setError(data.error); setStep('details'); return }
+      if (!data.proposal) { setError('No proposal returned. Please try again.'); setStep('details'); return }
       setProposal(data.proposal)
       setEditedProposal(data.proposal)
       // Save proposal + details to localStorage for query page
