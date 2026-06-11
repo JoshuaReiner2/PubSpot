@@ -1,8 +1,17 @@
 import { useState, useCallback } from 'react'
 import Head from 'next/head'
+import Link from 'next/link'
 import { useDropzone } from 'react-dropzone'
 import Nav from '../components/Nav'
 import styles from '../styles/Generate.module.css'
+
+export const config = { 
+  api: { 
+    bodyParser: true, 
+    responseLimit: '16mb' 
+  },
+  maxDuration: 60
+}
 
 const PROPOSAL_SECTIONS = [
   { key: 'overview', label: 'Overview' },
