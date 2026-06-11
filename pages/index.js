@@ -2,14 +2,13 @@ import Head from 'next/head'
 import Link from 'next/link'
 import Nav from '../components/Nav'
 import styles from '../styles/Home.module.css'
-
 import { useUser } from '@clerk/nextjs'
 
 function GetStartedBtn() {
   const { isSignedIn } = useUser()
   return (
     <a href={isSignedIn ? '/generate' : '/sign-up'} className={styles.cta}>
-      {isSignedIn ? 'Generate a proposal →' : 'Get started free →'}
+      {isSignedIn ? 'Generate a proposal' : 'Get started free'}
     </a>
   )
 }
