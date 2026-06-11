@@ -93,19 +93,23 @@ export default function Generate() {
     setEditedProposal(prev => ({ ...prev, [key]: value }))
   }
 
-  const handleDownload = () => {
-    const title = editedProposal.hook?.split('\n')[0]?.slice(0, 60) || 'Book Proposal'
-    const sections = PROPOSAL_SECTIONS.map(s =>
-      `${s.label.toUpperCase()}\n${'='.repeat(s.label.length)}\n\n${editedProposal[s.key] || ''}`
-    ).join('\n\n' + '-'.repeat(60) + '\n\n')
-    const content = `BOOK PROPOSAL\n${'='.repeat(60)}\n\nPrepared by PubSpot\n\n${'='.repeat(60)}\n\n${sections}`
-    const blob = new Blob([content], { type: 'text/plain;charset=utf-8' })
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = 'book-proposal.txt'
-    a.click()
-    URL.revokeObjectURL(url)
+ const handleDownload = async () => {
+    try {
+      const res = await fetch('/api/download-proposal', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ proposal: editedProposal }),
+      })
+      const blob = await res.blob()
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = 'book-proposal.docx'
+      a.click()
+      URL.revokeObjectURL(url)
+    } catch (e) {
+      alert('Could not download proposal. Please try again.')
+    }
   }
 
   const scrollToSection = (key) => {
