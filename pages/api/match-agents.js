@@ -38,16 +38,17 @@ Include every agent with a score. Return the full array.`
       messages: [{ role: 'user', content: prompt }],
     })
 
-    const raw = message.content[0].text.trim()
-    const start = raw.indexOf('[')
-    const end = raw.lastIndexOf(']')
+const raw = message.content[0].text.trim()
+    const cleaned = raw.replace(/```json/gi, '').replace(/```/g, '').trim()
+    const start = cleaned.indexOf('[')
+    const end = cleaned.lastIndexOf(']')
 
     if (start === -1 || end === -1) {
       console.error('No JSON array found:', raw.slice(0, 200))
       return res.status(500).json({ error: 'Could not match agents. Please try again.' })
     }
 
-    const matches = JSON.parse(raw.slice(start, end + 1))
+    const matches = JSON.parse(cleaned.slice(start, end + 1))
 
     const enriched = matches
       .map(match => {
