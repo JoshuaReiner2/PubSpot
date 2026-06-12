@@ -47,6 +47,44 @@ Return ONLY a raw JSON object (no markdown, no backticks, just the JSON). Each v
       messages: [{ role: 'user', content: prompt }],
     })
 
-    const raw = message.content[0].text.trim()
-    const stripped = raw.replace(/^```json\s*/i, '').replace(/^```\s*/i, '').replace(/```\s*$/i, '').trim()
-    const start = stripped.indexOf('{')
+ const raw = message.content[0].text.trim()
+    
+    // Try multiple JSON extraction strategies
+    let proposal
+    
+    // Strategy 1: find outermost { }
+    const start = raw.indexOf('{')
+    const end = raw.lastIndexOf('}')
+    
+    if (start === -1 || end === -1) {
+      console.error('No JSON braces found:', raw.slice(0, 200))
+      return res.status(500).json({ error: 'The AI returned an unexpected format. Please try again.' })
+    }
+    
+    const jsonStr = raw.slice(start, end + 1)
+    
+    try {
+      proposal = JSON.parse(jsonStr)
+    } catch (parseErr) {
+      // Strategy 2: try to fix common JSON issues
+      try {
+        const fixed = jsonStr
+          .replace(/[\u0000-\u001F\u007F-\u009F]/g, ' ')
+          .replace(/\n/g, '\\n')
+          .replace(/\r/g, '\\r')
+          .replace(/\t/g, '\\t')
+        proposal = JSON.parse(fixed)
+      } catch (e2) {
+        console.error('Both parse strategies failed:', parseErr.message)
+        return res.status(500).json({ error: 'The AI returned an unexpected format. Please try again.' })
+      }
+    }
+
+    res.status(200).json({ proposal })
+  } catch (e) {
+    console.error('Anthropic API error:', e)
+    if (e.status === 401) return res.status(500).json({ error: 'API key issue. Please check your Anthropic API key.' })
+    if (e.status === 429) return res.status(500).json({ error: 'Rate limit reached. Please wait and try again.' })
+    res.status(500).json({ error: 'Something went wrong. Please try again.' })
+  }
+}
