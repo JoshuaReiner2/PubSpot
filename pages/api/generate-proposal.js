@@ -53,15 +53,16 @@ Return ONLY a raw JSON object (no markdown, no backticks, just the JSON). Each v
     let proposal
     
     // Strategy 1: find outermost { }
-    const start = raw.indexOf('{')
-    const end = raw.lastIndexOf('}')
+    const cleaned = raw.replace(/```json/gi, '').replace(/```/g, '').trim()
+    const start = cleaned.indexOf('{')
+    const end = cleaned.lastIndexOf('}')
     
     if (start === -1 || end === -1) {
       console.error('No JSON braces found:', raw.slice(0, 200))
       return res.status(500).json({ error: 'The AI returned an unexpected format. Please try again.' })
     }
     
-    const jsonStr = raw.slice(start, end + 1)
+    const jsonStr = cleaned.slice(start, end + 1)
     
     try {
       proposal = JSON.parse(jsonStr)
