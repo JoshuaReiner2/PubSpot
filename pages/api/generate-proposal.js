@@ -50,7 +50,7 @@ Return ONLY a raw JSON object (no markdown, no backticks, just the JSON). Each v
   try {
    const message = await client.messages.create({
       model: 'claude-sonnet-4-6',
-      max_tokens: 8000,
+      max_tokens: 16000,
       system: 'You are a JSON API. You output ONLY raw JSON with no markdown, no backticks, no code fences, no explanation. Your entire response must start with { and end with }. Never use ```json or ``` in your response.',
       messages: [{ role: 'user', content: prompt }],
     })
