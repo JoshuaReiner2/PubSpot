@@ -32,6 +32,14 @@ export default async function handler(req, res) {
     const session = event.data.object
     const userId = session.metadata.userId
     const subscriptionId = session.subscription
-
     const subscription = await stripe.subscriptions.retrieve(subscriptionId)
     const priceId = subscription.items.data[0].price.id
+    let plan = 'querying'
+    if (priceId === process.env.NEXT_PUBLIC_STRIPE_PRO_PRICE_ID) plan = 'pro'
+    await clerkClient.users.updateUserMetadata(userId, {
+      publicMetadata: { plan, subscriptionId },
+    })
+  }
+
+  res.status(200).json({ received: true })
+}
