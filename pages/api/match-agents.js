@@ -1,8 +1,5 @@
-// v2
+// v3
 import agents from '../../data/agents.json'
-import Anthropic from '@anthropic-ai/sdk'
-
-const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' })
@@ -12,57 +9,38 @@ export default async function handler(req, res) {
 
   const openAgents = agents.filter(a => a.open)
 
-  const agentSummaries = openAgents.map(a =>
-    `ID:${a.id} | ${a.name} (${a.agency}) | Genres: ${a.genres.join(', ')} | Wishlist: ${a.wishlist.slice(0, 100)}`
-  ).join('\n')
+  // Local keyword matching — fast, reliable, no AI needed
+  const searchText = `${genre} ${audience || ''} ${overview || ''} ${compTitles || ''}`.toLowerCase()
 
-  const prompt = `You are a literary agent matching expert.
+  const scored = openAgents.map(agent => {
+    let score = 0
+    const agentText = `${agent.genres.join(' ')} ${agent.wishlist}`.toLowerCase()
 
-A nonfiction author is looking for representation:
-- Genre: ${genre}
-- Audience: ${audience || 'general readers'}
-- Overview: ${overview?.slice(0, 300) || 'Not provided'}
-- Comp titles: ${compTitles?.slice(0, 200) || 'Not provided'}
-
-Available agents:
-${agentSummaries}
-
-Return ONLY a raw JSON array. No markdown, no backticks. Rank ALL agents by fit score (1-10), best first. Format:
-[{"id":"1","score":8,"reason":"One sentence reason"},{"id":"2","score":7,"reason":"..."}]
-
-Include every agent with a score. Return the full array.`
-
-  try {
-    const message = await client.messages.create({
-      model: 'claude-sonnet-4-6',
-      max_tokens: 2000,
-      messages: [{ role: 'user', content: prompt }],
+    // Score by genre matches
+    agent.genres.forEach(g => {
+      if (searchText.includes(g.toLowerCase())) score += 2
     })
 
-const raw = message.content[0].text.trim()
-    const cleaned = raw.replace(/```json/gi, '').replace(/```/g, '').trim()
-    const start = cleaned.indexOf('[')
-    const end = cleaned.lastIndexOf(']')
+    // Score by wishlist keyword matches
+    const wishlistWords = agent.wishlist.toLowerCase().split(/\s+/)
+    const searchWords = searchText.split(/\s+/)
+    wishlistWords.forEach(word => {
+      if (word.length > 4 && searchWords.some(sw => sw.includes(word) || word.includes(sw))) {
+        score += 0.5
+      }
+    })
 
-    if (start === -1 || end === -1) {
-      console.error('No JSON array found:', raw.slice(0, 200))
-      return res.status(500).json({ error: 'Could not match agents. Please try again.' })
-    }
+    // Generate a reason
+    const matchedGenres = agent.genres.filter(g => searchText.includes(g.toLowerCase()))
+    const reason = matchedGenres.length > 0
+      ? `Represents ${matchedGenres.slice(0, 2).join(' and ')} — aligns with your book's genre and audience.`
+      : `Actively seeking nonfiction with strong narrative and commercial appeal.`
 
-    const matches = JSON.parse(cleaned.slice(start, end + 1))
+    return { ...agent, score: Math.min(10, Math.round(score * 10) / 10), reason }
+  })
 
-    const enriched = matches
-      .map(match => {
-        const agent = openAgents.find(a => a.id === match.id)
-        if (!agent) return null
-        return { ...agent, score: match.score, reason: match.reason }
-      })
-      .filter(Boolean)
-      .sort((a, b) => b.score - a.score)
+  // Sort by score, return all
+  const sorted = scored.sort((a, b) => b.score - a.score)
 
-    res.status(200).json({ agents: enriched })
-  } catch (e) {
-    console.error('Match error:', e)
-    res.status(500).json({ error: 'Could not match agents. Please try again.' })
-  }
+  res.status(200).json({ agents: sorted })
 }

@@ -426,3 +426,12 @@
   .pricing { padding: 72px 24px; }
   .pricingGrid { grid-template-columns: 1fr; }
 }
+
+.footerLinks {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.footerLinks a { color: var(--muted); font-size: 13px; }
+.footerLinks a:hover { color: var(--accent); }

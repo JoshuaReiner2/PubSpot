@@ -117,11 +117,15 @@ export default function Home() {
         </section>
       </main>
 
-      <footer className={styles.footer}>
-        <div className={styles.footerLogo}>Pub<span>Spot</span></div>
-        <p>© 2026 PubSpot. Built for nonfiction writers.</p>
-        <a href="mailto:hello@pubspot.com">hello@pubspot.com</a>
-      </footer>
+<footer className={styles.footer}>
+  <div className={styles.footerLogo}>Pub<span>Spot</span></div>
+  <p>© 2026 PubSpot. Built for nonfiction writers.</p>
+  <div className={styles.footerLinks}>
+    <a href="mailto:hello@pubspot.com">hello@pubspot.com</a>
+    <a href="/terms">Terms</a>
+    <a href="/privacy">Privacy</a>
+  </div>
+</footer>
     </>
   )
 }
