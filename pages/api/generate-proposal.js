@@ -60,7 +60,7 @@ Return ONLY a raw JSON object (no markdown, no backticks, just the JSON). Each v
     let proposal
     
     // Strategy 1: find outermost { }
-    const cleaned = raw.replace(/```json/gi, '').replace(/```/g, '').trim()
+    const cleaned = raw.replace(/`{3}json/gi, '').replace(/`{3}/g, '').trim()
     const start = cleaned.indexOf('{')
     const end = cleaned.lastIndexOf('}')
     
