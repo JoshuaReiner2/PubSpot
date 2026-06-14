@@ -42,7 +42,7 @@ export default async function handler(req, res) {
         return res.status(400).json({ error: 'The file appears to be empty or could not be read. Please try a different file.' })
       }
 
-      res.status(200).json({ text: text.slice(0, 120000) })
+      res.status(200).json({ text: text.slice(0, 200000) })
 
     } catch (e) {
       console.error('Text extraction error:', e)

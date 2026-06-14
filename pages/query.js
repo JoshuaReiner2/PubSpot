@@ -6,6 +6,10 @@ import styles from '../styles/Query.module.css'
 
 export default function Query() {
   const { user } = useUser()
+  const isAdmin = user?.publicMetadata?.role === 'admin'
+  const userPlan = user?.publicMetadata?.plan
+  const canQuery = isAdmin || userPlan === 'querying' || userPlan === 'pro'
+
   const [step, setStep] = useState('setup')
   const [proposal, setProposal] = useState(null)
   const [genre, setGenre] = useState('')
@@ -35,6 +39,11 @@ export default function Query() {
   }, [user])
 
   const handleMatch = async () => {
+    if (!canQuery) {
+      setError('Querying agents requires a paid plan. Upgrade at /pricing to get started.')
+      return
+    }
+
     setLoading(true)
     setError('')
     try {
@@ -114,6 +123,13 @@ export default function Query() {
               <h1>Find your agents</h1>
               <p>Tell us about your book and we'll match you with the agents most likely to be interested.</p>
             </div>
+
+            {!canQuery && (
+              <div className={styles.upgradePrompt}>
+                Querying agents requires a paid plan.{' '}
+                <a href="/pricing">Upgrade to get started</a>
+              </div>
+            )}
 
             {!proposal && (
               <div className={styles.warning}>
@@ -204,6 +220,10 @@ export default function Query() {
             </div>
 
             {error && <p className={styles.error}>{error}</p>}
+
+            <button className={styles.backLink} onClick={() => setStep('setup')}>
+              Back to search
+            </button>
           </div>
         )}
 

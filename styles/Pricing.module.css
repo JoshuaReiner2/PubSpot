@@ -1,0 +1,153 @@
+.main {
+  min-height: 100vh;
+  padding-top: 80px;
+  background: var(--cream);
+}
+
+.header {
+  text-align: center;
+  padding: 60px 24px 48px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.eyebrow {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 14px;
+}
+
+.header h1 {
+  font-family: var(--serif);
+  font-size: clamp(26px, 3.5vw, 40px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.header p {
+  font-size: 16px;
+  font-weight: 300;
+  color: var(--muted);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 24px 80px;
+}
+
+.plan {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 36px 28px;
+  background: white;
+  position: relative;
+}
+
+.featured {
+  border-color: var(--accent);
+  border-width: 2px;
+}
+
+.badge {
+  position: absolute;
+  top: -13px; left: 50%;
+  transform: translateX(-50%);
+  background: var(--accent);
+  color: white;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 4px 14px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+.planName {
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.planPrice {
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 1;
+  margin: 16px 0 4px;
+}
+
+.planPrice span { font-size: 16px; font-weight: 300; color: var(--muted); }
+
+.planDesc {
+  font-size: 14px;
+  color: var(--muted);
+  font-weight: 300;
+  margin-bottom: 24px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--border);
+  line-height: 1.6;
+}
+
+.features {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 28px;
+}
+
+.features li {
+  font-size: 14px;
+  font-weight: 300;
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+.features li::before { content: '→'; color: var(--accent); flex-shrink: 0; }
+
+.upgradeBtn {
+  display: block;
+  width: 100%;
+  padding: 14px;
+  text-align: center;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  background: var(--accent);
+  color: white;
+  border: none;
+  transition: background 0.2s;
+  font-family: var(--sans);
+}
+
+.upgradeBtn:hover { background: #a83d1e; }
+.featured .upgradeBtn { background: var(--accent); }
+
+.currentBtn {
+  display: block;
+  width: 100%;
+  padding: 14px;
+  text-align: center;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  background: var(--warm);
+  color: var(--muted);
+  border: 1px solid var(--border);
+}
+
+@media (max-width: 768px) {
+  .grid { grid-template-columns: 1fr; }
+}

@@ -19,7 +19,13 @@ export default async function handler(req, res) {
 You have been given a nonfiction manuscript and author details. Write a COMPLETE, DETAILED, PROFESSIONAL book proposal that would impress a top literary agent. Each section must be thorough and substantive.
 
 MANUSCRIPT:
-${manuscriptText.slice(0, 70000)}
+${manuscriptText.slice(0, 50000)}
+
+[MIDDLE SECTION]:
+${manuscriptText.slice(Math.floor(manuscriptText.length / 2) - 5000, Math.floor(manuscriptText.length / 2) + 5000)}
+
+[FINAL SECTION]:
+${manuscriptText.slice(-10000)}
 
 AUTHOR NAME: ${authorName}
 GENRE/CATEGORY: ${genre}

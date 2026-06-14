@@ -1,17 +1,9 @@
 import { useState, useCallback } from 'react'
+import { useUser } from '@clerk/nextjs'
 import Head from 'next/head'
-import Link from 'next/link'
 import { useDropzone } from 'react-dropzone'
 import Nav from '../components/Nav'
 import styles from '../styles/Generate.module.css'
-
-export const config = { 
-  api: { 
-    bodyParser: true, 
-    responseLimit: '16mb' 
-  },
-  maxDuration: 60
-}
 
 const PROPOSAL_SECTIONS = [
   { key: 'overview', label: 'Overview' },
@@ -24,6 +16,13 @@ const PROPOSAL_SECTIONS = [
 ]
 
 export default function Generate() {
+  const { user } = useUser()
+  const isAdmin = user?.publicMetadata?.role === 'admin'
+  const userPlan = user?.publicMetadata?.plan
+  const canGenerate = isAdmin || userPlan === 'querying' || userPlan === 'pro'
+  const proposalCount = parseInt(typeof window !== 'undefined' ? localStorage.getItem('proposal_count') || '0' : '0')
+  const freeTrialUsed = proposalCount >= 1
+
   const [step, setStep] = useState('upload')
   const [file, setFile] = useState(null)
   const [manuscriptText, setManuscriptText] = useState('')
@@ -60,6 +59,11 @@ export default function Generate() {
   })
 
   const handleGenerate = async () => {
+    if (!canGenerate && freeTrialUsed) {
+      setError('You have used your free proposal. Upgrade at /pricing to generate more.')
+      return
+    }
+
     setStep('generating')
     setProgress('Reading your manuscript...')
     setError('')
@@ -68,22 +72,21 @@ export default function Generate() {
       const res = await fetch('/api/generate-proposal', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ manuscriptText: manuscriptText.slice(0, 80000), details }),
+        body: JSON.stringify({ manuscriptText, details }),
       })
       setProgress('Drafting your proposal sections...')
-const data = await res.json()
-      console.log('API response:', JSON.stringify(data).slice(0, 500))
+      const data = await res.json()
       if (data.error) { setError(data.error); setStep('details'); return }
       if (!data.proposal) { setError('No proposal returned. Please try again.'); setStep('details'); return }
       setProposal(data.proposal)
       setEditedProposal(data.proposal)
-      // Save proposal + details to localStorage for query page
       localStorage.setItem('pubspot_proposal', JSON.stringify({
         ...data.proposal,
         genre: details.genre,
         audience: details.audience,
         authorName: details.authorName,
       }))
+      if (!canGenerate) localStorage.setItem('proposal_count', (proposalCount + 1).toString())
       setStep('proposal')
     } catch (e) {
       setError('Something went wrong generating your proposal. Please try again.')
@@ -95,7 +98,7 @@ const data = await res.json()
     setEditedProposal(prev => ({ ...prev, [key]: value }))
   }
 
- const handleDownload = async () => {
+  const handleDownload = async () => {
     try {
       const res = await fetch('/api/download-proposal', {
         method: 'POST',
@@ -123,7 +126,7 @@ const data = await res.json()
   return (
     <>
       <Head>
-        <title>Generate Proposal — PubSpot</title>
+        <title>Generate Proposal - PubSpot</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <Nav />
@@ -136,11 +139,17 @@ const data = await res.json()
               <h1>Upload your manuscript</h1>
               <p>We'll read your work and use it to draft your full book proposal. Supports PDF, Word (.docx), or plain text.</p>
             </div>
+            {!canGenerate && freeTrialUsed && (
+              <div className={styles.upgradePrompt}>
+                You have used your free proposal.{' '}
+                <a href="/pricing">Upgrade to generate more</a>
+              </div>
+            )}
             <div {...getRootProps()} className={`${styles.dropzone} ${isDragActive ? styles.active : ''}`}>
               <input {...getInputProps()} />
               <div className={styles.dropIcon}>📄</div>
               <p className={styles.dropMain}>{isDragActive ? 'Drop it here' : 'Drag your manuscript here'}</p>
-              <p className={styles.dropSub}>or click to browse — PDF, DOCX, or TXT up to 20MB</p>
+              <p className={styles.dropSub}>or click to browse - PDF, DOCX, or TXT up to 20MB</p>
             </div>
             {error && <p className={styles.error}>{error}</p>}
           </div>
@@ -155,7 +164,7 @@ const data = await res.json()
             </div>
             <div className={styles.fileConfirm}>
               <span className={styles.fileIcon}>✓</span>
-              <span>{file?.name} — {Math.round(manuscriptText.length / 5)} words extracted</span>
+              <span>{file?.name} - {Math.round(manuscriptText.length / 5)} words extracted</span>
             </div>
             <div className={styles.form}>
               <div className={styles.field}>
@@ -181,10 +190,10 @@ const data = await res.json()
             </div>
             {error && <p className={styles.error}>{error}</p>}
             <div className={styles.formActions}>
-              <button className={styles.backBtn} onClick={() => setStep('upload')}>← Back</button>
+              <button className={styles.backBtn} onClick={() => setStep('upload')}>Back</button>
               <button className={styles.generateBtn} onClick={handleGenerate}
                 disabled={!details.authorName || !details.genre}>
-                Generate my proposal →
+                Generate my proposal
               </button>
             </div>
           </div>
@@ -220,13 +229,13 @@ const data = await res.json()
                   </button>
                 ))}
               </nav>
-<div className={styles.sidebarActions}>
-  <button className={styles.downloadBtn} onClick={handleDownload}>Download proposal</button>
-  <a href="/query" className={styles.queryBtn}>Query agents →</a>
-  <button className={styles.restartBtn} onClick={() => { setStep('upload'); setProposal(null); setFile(null); }}>
-    Start new proposal
-  </button>
-</div>
+              <div className={styles.sidebarActions}>
+                <button className={styles.downloadBtn} onClick={handleDownload}>Download proposal</button>
+                <a href="/query" className={styles.queryBtn}>Query agents</a>
+                <button className={styles.restartBtn} onClick={() => { setStep('upload'); setProposal(null); setFile(null); }}>
+                  Start new proposal
+                </button>
+              </div>
             </div>
             <div className={styles.proposalMain}>
               <div className={styles.proposalBanner}>
