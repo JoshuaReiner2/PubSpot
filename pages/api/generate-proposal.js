@@ -66,7 +66,7 @@ Return ONLY a raw JSON object (no markdown, no backticks, just the JSON). Each v
     const end = cleaned.lastIndexOf('}')
     
     if (start === -1 || end === -1) {
-      console.error('No JSON braces found:', raw.slice(0, 200))
+      console.error('Raw response first 500 chars:', JSON.stringify(raw.slice(0, 500)))
       return res.status(500).json({ error: 'The AI returned an unexpected format. Please try again.' })
     }
     
