@@ -37,13 +37,13 @@ export default function Privacy() {
           <p>We implement reasonable security measures to protect your information. However, no method of transmission over the internet is 100% secure.</p>
 
           <h2>8. Your Rights</h2>
-          <p>You may request deletion of your account and associated data at any time by emailing <a href="mailto:hello@pubspot.com">hello@pubspot.com</a>.</p>
+          <p>You may request deletion of your account and associated data at any time by emailing <a href="mailto:hello@pubspot.ink">hello@pubspot.ink</a>.</p>
 
           <h2>9. Changes to This Policy</h2>
           <p>We may update this Privacy Policy from time to time. We will notify you of significant changes by email or through the Service.</p>
 
           <h2>10. Contact</h2>
-          <p>Questions about privacy? Email us at <a href="mailto:hello@pubspot.com">hello@pubspot.com</a></p>
+          <p>Questions about privacy? Email us at <a href="mailto:hello@pubspot.ink">hello@pubspot.ink</a></p>
         </div>
       </main>
       <footer className={styles.footer}>

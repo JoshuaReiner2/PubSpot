@@ -121,7 +121,7 @@ export default function Home() {
   <div className={styles.footerLogo}>Pub<span>Spot</span></div>
   <p>© 2026 PubSpot. Built for nonfiction writers.</p>
   <div className={styles.footerLinks}>
-    <a href="mailto:hello@pubspot.com">hello@pubspot.com</a>
+    <a href="mailto:hello@pubspot.ink">hello@pubspot.ink</a>
     <a href="/terms">Terms</a>
     <a href="/privacy">Privacy</a>
   </div>
