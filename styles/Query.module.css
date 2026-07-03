@@ -276,3 +276,65 @@
 }
 
 .backLink:hover { color: var(--ink); }
+
+.previewMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 20px 24px;
+  margin-bottom: 24px;
+}
+
+.previewMetaItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+}
+
+.previewMetaLabel {
+  font-weight: 500;
+  color: var(--muted);
+  width: 70px;
+  flex-shrink: 0;
+}
+
+.letterEditor {
+  margin-bottom: 24px;
+}
+
+.letterEditorLabel {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 10px;
+}
+
+.letterTextarea {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 20px;
+  font-family: var(--sans);
+  font-size: 15px;
+  line-height: 1.8;
+  color: var(--ink);
+  background: white;
+  resize: vertical;
+  font-weight: 300;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.letterTextarea:focus { border-color: var(--accent); }
+
+.previewActions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}

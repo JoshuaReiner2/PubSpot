@@ -21,7 +21,9 @@ export default function Query() {
   const [sentQueries, setSentQueries] = useState([])
   const [activeAgent, setActiveAgent] = useState(null)
   const [queryLetter, setQueryLetter] = useState('')
+  const [editedLetter, setEditedLetter] = useState('')
   const [sending, setSending] = useState(false)
+  const [generating, setGenerating] = useState(false)
 
   useEffect(() => {
     if (user?.emailAddresses?.[0]?.emailAddress) {
@@ -43,7 +45,6 @@ export default function Query() {
       setError('Querying agents requires a paid plan. Upgrade at /pricing to get started.')
       return
     }
-
     setLoading(true)
     setError('')
     try {
@@ -68,12 +69,12 @@ export default function Query() {
     }
   }
 
-  const handleSendQuery = async (agent) => {
+  const handlePreview = async (agent) => {
     setActiveAgent(agent)
-    setSending(true)
+    setGenerating(true)
     setError('')
     try {
-      const res = await fetch('/api/send-query', {
+      const res = await fetch('/api/generate-query-letter', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -86,12 +87,38 @@ export default function Query() {
       const data = await res.json()
       if (data.error) { setError(data.error); return }
       setQueryLetter(data.queryLetter)
+      setEditedLetter(data.queryLetter)
+      setStep('preview')
+    } catch (e) {
+      setError('Could not generate query letter. Please try again.')
+    } finally {
+      setGenerating(false)
+    }
+  }
+
+  const handleSend = async () => {
+    setSending(true)
+    setError('')
+    try {
+      const res = await fetch('/api/send-query', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          agent: activeAgent,
+          proposal,
+          authorName: user?.fullName || 'Author',
+          authorEmail,
+          queryLetter: editedLetter,
+        }),
+      })
+      const data = await res.json()
+      if (data.error) { setError(data.error); return }
       setSentQueries(prev => [...prev, {
-        agent,
+        agent: activeAgent,
         method: data.method,
         sent: data.sent,
         submissionUrl: data.submissionUrl,
-        queryLetter: data.queryLetter,
+        queryLetter: editedLetter,
         date: new Date().toLocaleDateString(),
         status: data.sent ? 'Sent' : 'Ready to submit',
       }])
@@ -169,7 +196,7 @@ export default function Query() {
             <div className={styles.stepHeader}>
               <div className={styles.eyebrow}>{agents.length} agents matched</div>
               <h1>Your agent matches</h1>
-              <p>Ranked by fit. Review each agent and send your personalized query with one click.</p>
+              <p>Ranked by fit. Click an agent to preview and edit your personalized query before sending.</p>
             </div>
 
             {sentQueries.length > 0 && (
@@ -209,9 +236,9 @@ export default function Query() {
                       <div className={styles.sentTag}>Done - {alreadySent.status}</div>
                     ) : (
                       <button className={styles.sendBtn}
-                        onClick={() => handleSendQuery(agent)}
-                        disabled={sending}>
-                        {sending && activeAgent?.id === agent.id ? 'Preparing query...' : 'Send personalized query'}
+                        onClick={() => handlePreview(agent)}
+                        disabled={generating}>
+                        {generating && activeAgent?.id === agent.id ? 'Generating letter...' : 'Preview query letter'}
                       </button>
                     )}
                   </div>
@@ -227,16 +254,64 @@ export default function Query() {
           </div>
         )}
 
+        {step === 'preview' && (
+          <div className={styles.container}>
+            <div className={styles.stepHeader}>
+              <div className={styles.eyebrow}>Review your query</div>
+              <h1>Query to {activeAgent?.name}</h1>
+              <p>Review and edit your personalized query letter before sending. This will go to {activeAgent?.email || 'their submission form'}.</p>
+            </div>
+
+            <div className={styles.previewMeta}>
+              <div className={styles.previewMetaItem}>
+                <span className={styles.previewMetaLabel}>Agent</span>
+                <span>{activeAgent?.name}, {activeAgent?.agency}</span>
+              </div>
+              <div className={styles.previewMetaItem}>
+                <span className={styles.previewMetaLabel}>Method</span>
+                <span className={`${styles.methodBadge} ${activeAgent?.submissionMethod === 'email' ? styles.emailBadge : styles.formBadge}`}>
+                  {activeAgent?.submissionMethod === 'email' ? 'Email' : 'Form'}
+                </span>
+              </div>
+              <div className={styles.previewMetaItem}>
+                <span className={styles.previewMetaLabel}>Reply-to</span>
+                <span>{authorEmail}</span>
+              </div>
+            </div>
+
+            <div className={styles.letterEditor}>
+              <div className={styles.letterEditorLabel}>Your query letter — edit freely</div>
+              <textarea
+                className={styles.letterTextarea}
+                value={editedLetter}
+                onChange={e => setEditedLetter(e.target.value)}
+                rows={20}
+              />
+            </div>
+
+            {error && <p className={styles.error}>{error}</p>}
+
+            <div className={styles.previewActions}>
+              <button className={styles.backBtn} onClick={() => setStep('agents')}>
+                Back to agents
+              </button>
+              <button className={styles.primaryBtn} onClick={handleSend} disabled={sending}>
+                {sending ? 'Sending...' : activeAgent?.submissionMethod === 'email' ? 'Send query' : 'Prepare for form submission'}
+              </button>
+            </div>
+          </div>
+        )}
+
         {step === 'sent' && (
           <div className={styles.container}>
             <div className={styles.successBox}>
               <div className={styles.successIcon}>✓</div>
               <h2>Query sent to {activeAgent?.name}!</h2>
-              <p>Your personalized query letter has been emailed to {activeAgent?.email}. They will reply directly to your email address.</p>
+              <p>Your query letter has been emailed to {activeAgent?.email}. They will reply directly to {authorEmail}.</p>
             </div>
             <div className={styles.letterPreview}>
-              <div className={styles.letterLabel}>Your query letter</div>
-              <pre className={styles.letterText}>{queryLetter}</pre>
+              <div className={styles.letterLabel}>Query sent</div>
+              <pre className={styles.letterText}>{editedLetter}</pre>
             </div>
             <button className={styles.primaryBtn} onClick={() => setStep('agents')}>
               Back to agents
@@ -256,10 +331,10 @@ export default function Query() {
               </a>
             </div>
             <div className={styles.letterPreview}>
-              <div className={styles.letterLabel}>Your personalized query letter - copy and paste into the form</div>
-              <pre className={styles.letterText}>{queryLetter}</pre>
+              <div className={styles.letterLabel}>Your query letter - copy and paste into the form</div>
+              <pre className={styles.letterText}>{editedLetter}</pre>
               <button className={styles.copyBtn}
-                onClick={() => navigator.clipboard.writeText(queryLetter)}>
+                onClick={() => navigator.clipboard.writeText(editedLetter)}>
                 Copy to clipboard
               </button>
             </div>
