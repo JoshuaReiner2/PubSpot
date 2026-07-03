@@ -43,7 +43,7 @@ Write a professional, compelling query letter of 3-4 paragraphs.
 
     if (agent.submissionMethod === 'email') {
       await resend.emails.send({
-        from: 'PubSpot <onboarding@resend.dev>',
+        from: 'PubSpot <queries@resend.dev>',
         to: agent.email,
         replyTo: authorEmail,
         subject: `Query: ${proposal.hook?.slice(0, 60) || 'Book Query'}`,
